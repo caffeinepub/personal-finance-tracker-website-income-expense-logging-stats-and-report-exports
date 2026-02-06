@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0.5rem;
+        
+        /* Warm earthy palette - Light mode */
+        --background: 0.98 0.01 60;
+        --foreground: 0.25 0.02 60;
+        --card: 1 0 0;
+        --card-foreground: 0.25 0.02 60;
+        --popover: 1 0 0;
+        --popover-foreground: 0.25 0.02 60;
+        
+        /* Warm terracotta primary */
+        --primary: 0.55 0.15 35;
+        --primary-foreground: 0.98 0.01 60;
+        
+        /* Soft sage secondary */
+        --secondary: 0.92 0.02 140;
+        --secondary-foreground: 0.25 0.02 60;
+        
+        --muted: 0.95 0.01 60;
+        --muted-foreground: 0.50 0.02 60;
+        
+        /* Warm amber accent */
+        --accent: 0.88 0.08 70;
+        --accent-foreground: 0.25 0.02 60;
+        
+        --destructive: 0.55 0.20 25;
+        --destructive-foreground: 0.98 0.01 60;
+        
+        --border: 0.90 0.01 60;
+        --input: 0.90 0.01 60;
+        --ring: 0.55 0.15 35;
+        
+        /* Chart colors - earthy tones */
+        --chart-1: 0.55 0.15 35;
+        --chart-2: 0.60 0.12 140;
+        --chart-3: 0.65 0.14 70;
+        --chart-4: 0.50 0.10 200;
+        --chart-5: 0.58 0.13 320;
+    }
+
+    .dark {
+        --background: 0.18 0.02 60;
+        --foreground: 0.95 0.01 60;
+        --card: 0.22 0.02 60;
+        --card-foreground: 0.95 0.01 60;
+        --popover: 0.20 0.02 60;
+        --popover-foreground: 0.95 0.01 60;
+        
+        /* Lighter terracotta for dark mode */
+        --primary: 0.65 0.15 35;
+        --primary-foreground: 0.18 0.02 60;
+        
+        --secondary: 0.28 0.02 140;
+        --secondary-foreground: 0.95 0.01 60;
+        
+        --muted: 0.28 0.02 60;
+        --muted-foreground: 0.65 0.02 60;
+        
+        --accent: 0.35 0.03 70;
+        --accent-foreground: 0.95 0.01 60;
+        
+        --destructive: 0.60 0.20 25;
+        --destructive-foreground: 0.18 0.02 60;
+        
+        --border: 0.30 0.02 60;
+        --input: 0.30 0.02 60;
+        --ring: 0.65 0.15 35;
+        
+        /* Chart colors for dark mode */
+        --chart-1: 0.60 0.15 35;
+        --chart-2: 0.65 0.12 140;
+        --chart-3: 0.70 0.14 70;
+        --chart-4: 0.55 0.10 200;
+        --chart-5: 0.63 0.13 320;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-background text-foreground;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+}
+
+/* Print styles for reports */
+@media print {
+    @page {
+        margin: 1cm;
+    }
+    
+    body {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .print\:hidden {
+        display: none !important;
+    }
+    
+    .print\:shadow-none {
+        box-shadow: none !important;
+    }
+    
+    .print\:border {
+        border: 1px solid #e5e7eb !important;
+    }
+    
+    .print\:border-0 {
+        border: 0 !important;
+    }
+    
+    .print\:border-gray-300 {
+        border-color: #d1d5db !important;
+    }
+    
+    .print\:text-xs {
+        font-size: 0.75rem !important;
+        line-height: 1rem !important;
+    }
+    
+    .print\:text-xl {
+        font-size: 1.25rem !important;
+        line-height: 1.75rem !important;
+    }
+    
+    .print\:py-1 {
+        padding-top: 0.25rem !important;
+        padding-bottom: 0.25rem !important;
+    }
+    
+    .print\:pb-2 {
+        padding-bottom: 0.5rem !important;
+    }
+    
+    .print\:gap-2 {
+        gap: 0.5rem !important;
+    }
+    
+    .print\:space-y-4 > * + * {
+        margin-top: 1rem !important;
+    }
+}

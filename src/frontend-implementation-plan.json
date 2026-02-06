@@ -1,0 +1,62 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Custom currency option and reliable transaction save flow",
+  "requirements": [
+    {
+      "id": "REQ-25",
+      "summary": "Add a Custom currency option in the Transaction form with custom code/name and optional symbol, preserving exchange-rate conversion and INR preview.",
+      "acceptanceCriteria": [
+        "The Currency dropdown includes an option labeled \"Custom\" (or \"Custom...\") in addition to the existing preset currencies.",
+        "Selecting \"Custom\" reveals inputs to capture a user-defined currency identifier (e.g., code like \"SGD\" or name) and an optional symbol for display next to the Amount label.",
+        "When \"Custom\" is selected, the exchange-rate section is shown and required (same as other non-INR currencies).",
+        "The INR amount preview (≈ ₹X.XX INR) continues to compute correctly using Amount × Exchange Rate for Custom currency."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/transactions/TransactionFormDialog.tsx",
+          "operation": "modify",
+          "description": "Extend the currency selector to include a \"Custom\" option; when selected, show fields for custom currency identifier (code/name) and optional symbol, and use the entered symbol for the Amount label. Ensure Custom behaves like a non-INR currency for exchange-rate visibility/required validation and continues to compute the INR preview as Amount × Exchange Rate."
+        }
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "summary": "Fix transaction create/update submissions by aligning frontend transaction mutations with the backend interface signature to prevent runtime call failures.",
+      "acceptanceCriteria": [
+        "Submitting the \"Add Transaction\" form successfully persists a new transaction and shows the existing success toast (\"Transaction added successfully!\") and the dialog closes.",
+        "Submitting the \"Edit Transaction\" form successfully updates the existing transaction and shows the existing success toast (\"Transaction updated successfully!\") and the dialog closes.",
+        "Frontend calls to the backend updateTransaction method match the backend Candid signature (i.e., optional fields are passed as optional values, not required primitives), avoiding runtime call failures.",
+        "If the backend rejects the call (e.g., unauthorized), the UI shows an error toast and does not close the dialog."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useTransactions.ts",
+          "operation": "modify",
+          "description": "Update add/update transaction mutations to call the backend using the generated backend interface shape (pass a single TransactionData object to addTransaction, and transactionId + TransactionData to updateTransaction). Where the backend expects optional values, ensure the mutation constructs and passes option-shaped values rather than raw primitives to avoid type/parameter mismatches."
+        },
+        {
+          "path": "frontend/src/features/transactions/TransactionFormDialog.tsx",
+          "operation": "modify",
+          "description": "Adjust form submission payload construction (add/update) to match the updated useTransactions mutation parameter shape and ensure the dialog only closes after a successful mutation resolve; on backend rejection/errors, keep the dialog open and allow user retry."
+        }
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "summary": "Surface underlying transaction-save error messages in toasts safely for both add and update flows.",
+      "acceptanceCriteria": [
+        "When saving fails, the toast still starts with an English summary (e.g., \"Failed to save transaction\") and additionally includes the underlying error message string when it can be extracted safely.",
+        "No raw non-string objects are rendered in the toast; error details are stringified safely.",
+        "This change applies to both add and update transaction flows."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/transactions/TransactionFormDialog.tsx",
+          "operation": "modify",
+          "description": "Improve the catch/error handling for add/update submits: extract a safe message from unknown errors (prefer Error.message or a string value; otherwise safely stringify) and include it in the toast after an English summary, applying the same behavior to both add and edit flows."
+        }
+      ]
+    }
+  ]
+}

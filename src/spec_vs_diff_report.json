@@ -1,0 +1,16 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-06T10:00:23.760Z",
+  "summary": "Diff appears to address the Transaction form currency UX (including a CUSTOM currency state and custom currency fields) and adjusts transaction CRUD hooks to call backend methods with a TransactionData object. Due to truncation of key sections (form submit logic, UI rendering of Custom option/exchange rate/preview, and backend updateTransaction signature details), several acceptance-criteria aspects cannot be conclusively verified from the provided diff excerpt.",
+  "missing_requirements": [],
+  "hallucinated_features": [],
+  "confidence": 0.46,
+  "changed_files": [
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/src/features/transactions/TransactionFormDialog.tsx",
+    "frontend/src/hooks/useTransactions.ts",
+    "project_state.json"
+  ]
+}

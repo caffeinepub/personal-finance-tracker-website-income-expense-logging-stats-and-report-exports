@@ -1,0 +1,328 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 29,
+  "summary": "Shift scope to building a personal finance tracking website where users can record incomes and expenses, view statistics/dashboards, and export well-formatted reports.",
+  "architectural_notes": [
+    "Frontend uses Internet Identity for authentication and gates access to session/chat features.",
+    "Nearby-only behavior implemented via short session codes (create/join) rather than geolocation.",
+    "Chat updates use periodic polling instead of realtime sockets.",
+    "Attachments (images/videos/audio) are handled as message-linked stored assets with explicit client-side size limits.",
+    "Deployment flow now includes a scripted repro path that captures deploy logs and a repository troubleshooting guide documenting required commands and environment prerequisites (e.g., dfx/tooling versions and build steps).",
+    "Project includes a standardized build/deploy template (Dockerfile, icp.yaml, deploy.sh, canister.yaml) used to ensure consistent packaging and deployment behavior.",
+    "Deployment guidance expanded to include a deterministic/ repeatable IC deploy workflow and post-deploy health verification checklists (health verification + core user-flow checklist).",
+    "Add multi-currency handling to finance transactions and reports: default currency INR with optional conversion using user-provided exchange rates."
+  ],
+  "known_issues": [
+    "Initial project scope mentioned Android APK and live voice calls; current implementation is a web app with voice notes (record-and-send) rather than realtime calling.",
+    "Deployment is still failing/intermittent despite retries; user requested repeated attempts until successful deployment.",
+    "User reports they cannot save a transaction (save action failing in Add/Edit Transaction flow)."
+  ],
+  "isFixRequest": true,
+  "generatedImages": [
+    {
+      "filename": "frontend/public/assets/generated/nearby-logo.dim_512x512.png",
+      "description": "Modern minimal chat-bubble logo mark (512x512).",
+      "targetWidth": 512,
+      "targetHeight": 512
+    },
+    {
+      "filename": "frontend/public/assets/generated/nearby-pattern.dim_1600x900.png",
+      "description": "Subtle repeating abstract pattern background in warm neutral palette (1600x900).",
+      "targetWidth": 1600,
+      "targetHeight": 900
+    }
+  ],
+  "existing_features": [
+    {
+      "id": "IF-1",
+      "title": "Internet Identity authentication (sign in/out gate)",
+      "synonyms": [
+        "II auth",
+        "Internet Identity login"
+      ],
+      "description": "Users must authenticate via Internet Identity before accessing session and chat features; frontend uses II hooks and backend authorization mixins/access control.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-2",
+      "title": "Proximity session codes for nearby-only chat (no geolocation)",
+      "synonyms": [
+        "session code flow",
+        "create/join session"
+      ],
+      "description": "Users can create a session that generates a short code; others can join by entering the code. Chat is scoped to the active session code.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-3",
+      "title": "Persistent session text chat with periodic polling",
+      "synonyms": [
+        "message persistence",
+        "polled chat"
+      ],
+      "description": "1:1 and/or session-wide text messages are stored in the Motoko backend and rendered in the frontend with periodic polling (no realtime sockets).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-4",
+      "title": "In-chat media sharing (pictures/videos) as message attachments with limits",
+      "synonyms": [
+        "media attachments",
+        "photo/video sharing"
+      ],
+      "description": "Users can attach images/videos to messages with client-side size limits and backend storage/retrieval APIs via a storage client utility.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-5",
+      "title": "Voice notes (record-and-send audio messages) in chat",
+      "synonyms": [
+        "audio messages",
+        "voice messages"
+      ],
+      "description": "Users can record audio in the browser, upload as an attachment, and play back voice notes inside chat (not live voice calls).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-6",
+      "title": "Coherent warm-neutral visual theme applied across auth/session/chat screens",
+      "synonyms": [
+        "app theme",
+        "UI design system"
+      ],
+      "description": "Consistent colors/typography/layout across sign-in, session join/create, and chat views; avoids blue/purple primary palette.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-7",
+      "title": "Generated brand assets integrated into UI (logo + subtle background pattern)",
+      "synonyms": [
+        "static brand assets",
+        "generated images"
+      ],
+      "description": "Logo is displayed in header/auth areas and a subtle repeating pattern is used for auth/session screens, loaded from frontend/public/assets/generated.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-8",
+      "title": "Deployment failure reproduced, fixed, and documented (deploy repro + troubleshooting guide)",
+      "synonyms": [
+        "deploy fix",
+        "deployment troubleshooting",
+        "deploy repro logs"
+      ],
+      "description": "Adds scripts and documentation to reproduce the deployment/push failure with captured logs, applies minimal build/deploy template and configuration changes to unblock successful canister deployment, and documents the exact deploy commands and environment prerequisites.",
+      "reqIds": [
+        "REQ-8",
+        "REQ-9",
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-9",
+      "title": "Deterministic IC deployment workflow + post-deploy health verification docs",
+      "synonyms": [
+        "repeatable deploy workflow",
+        "post-deploy verification",
+        "health checks checklist"
+      ],
+      "description": "Adds a repeatable/deterministic deployment workflow guide plus post-deploy health verification documentation (health checks and core flows checklist) to validate canisters and key app flows after deployment.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-current-app-experience-with-a-personal-finance-tracking-app-gated-by-internet-identity-sign-in-so-each-signed-in-user-can-manage-their-own-private-data",
+      "title": "Replace the current app experience with a personal finance tracking app gated by Internet Identity sign-in, so each signed-in user can manage their own private data.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-transactions-ui-where-users-can-add-edit-delete-income-and-expense-transactions-with-fields-date-amount-category-and-description-plus-a-list-view-with-filtering-and-basic-sorting",
+      "title": "Build a Transactions UI where users can add/edit/delete income and expense transactions with fields: date, amount, category, and description, plus a list view with filtering and basic sorting.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-a-dashboard-stats-view-that-summarizes-incomes-vs-expenses-over-time-monthly-totals-and-includes-a-category-breakdown-for-a-selected-date-range",
+      "title": "Provide a Dashboard/Stats view that summarizes incomes vs expenses over time (monthly totals) and includes a category breakdown for a selected date range.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-reports-feature-that-can-generate-well-formatted-exports-for-a-selected-date-range-including-1-a-printable-report-view-and-2-a-csv-export-of-transactions",
+      "title": "Add a Reports feature that can generate well-formatted exports for a selected date range, including (1) a printable report view and (2) a CSV export of transactions.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-cohesive-finance-oriented-visual-theme-across-all-new-screens-transactions-dashboard-reports-using-tailwind-shadcn-components-ensuring-consistent-spacing-typography-and-accessible-contrast-avoid-blue-purple-unless-explicitly-requested",
+      "title": "Apply a cohesive, finance-oriented visual theme across all new screens (Transactions, Dashboard, Reports) using Tailwind + shadcn components, ensuring consistent spacing, typography, and accessible contrast (avoid blue/purple unless explicitly requested).",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-integrate-newly-generated-static-brand-assets-logo-subtle-background-pattern-into-the-finance-app-ui-from-frontend-public-assets-generated-without-routing-image-assets-through-the-backend",
+      "title": "Integrate newly generated static brand assets (logo + subtle background pattern) into the finance app UI from frontend/public/assets/generated, without routing image assets through the backend.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-change-all-money-formatting-and-default-currency-display-across-the-finance-app-from-usd-to-inr-including-transactions-list-dashboard-totals-and-printable-reports",
+      "title": "Change all money formatting and default currency display across the finance app from USD to INR (₹), including Transactions list, Dashboard totals, and printable Reports.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-multi-currency-input-option-to-the-add-edit-transaction-dialog-that-lets-the-user-enter-an-amount-in-a-selected-foreign-currency-and-manually-convert-it-to-inr-using-a-user-provided-exchange-rate-input-box-saving-the-final-stored-amount-as-inr",
+      "title": "Add a multi-currency input option to the Add/Edit Transaction dialog that lets the user enter an amount in a selected foreign currency and manually convert it to INR using a user-provided exchange rate input box, saving the final stored amount as INR.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-csv-export-content-headers-so-exported-amounts-are-clearly-labeled-as-inr-amounts",
+      "title": "Update CSV export content/headers so exported amounts are clearly labeled as INR amounts.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-in-the-add-edit-transaction-dialog-provide-a-currency-selector-as-a-dropdown-and-a-manual-exchange-rate-input-field-for-converting-non-inr-amounts-to-inr-before-saving",
+      "title": "In the Add/Edit Transaction dialog, provide a currency selector as a dropdown and a manual exchange-rate input field for converting non-INR amounts to INR before saving.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-custom-option-to-the-currency-dropdown-in-the-add-edit-transaction-dialog-so-users-can-select-a-currency-not-listed-in-the-preset-currencies",
+      "title": "Add a \"Custom\" option to the Currency dropdown in the Add/Edit Transaction dialog so users can select a currency not listed in the preset currencies.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-add-edit-transaction-save-flow-so-transactions-can-be-successfully-created-updated-from-the-transactionformdialog-without-failing-due-to-frontend-backend-parameter-type-mismatches",
+      "title": "Fix the Add/Edit Transaction save flow so transactions can be successfully created/updated from the TransactionFormDialog without failing due to frontend-backend parameter/type mismatches.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-error-visibility-for-failed-transaction-saves-by-surfacing-the-underlying-error-message-when-available-in-the-ui-toast-while-keeping-user-facing-text-in-english",
+      "title": "Improve error visibility for failed transaction saves by surfacing the underlying error message (when available) in the UI toast while keeping user-facing text in English.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Fix the remaining intermittent deployment/build failures so the project can be deployed successfully to the Internet Computer as a web app (no APK builds).",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "After deployment, verify core user flows work in the deployed environment: Internet Identity sign-in/out, create/join session via code, send/receive text messages, upload an image/video attachment within limits, and record/send a voice note (non-realtime).",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Implement income/expense recording: add/edit/delete transactions with basic fields (date, amount, category, description) and list/filter views.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Provide statistics/dashboard views for incomes vs expenses over time (e.g., monthly summaries, category breakdowns, charts).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Generate and export well-formatted reports (e.g., printable report and/or CSV/PDF export) for selected date ranges.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Implement backend persistence for personal finance transactions scoped to the authenticated user (by Principal), supporting create, read/list, update, and delete operations.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Support INR as the default currency (instead of USD) and add multi-currency conversion options, including an exchange-rate input box for conversions.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "In the Add/Edit Transaction multi-currency flow, provide a currency dropdown selector plus a manual exchange-rate input box to convert to INR.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add a \"Custom\" option to the currency dropdown in the Add/Edit Transaction multi-currency flow (to allow user-defined currency input/handling).",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Personal finance tracker website (income/expense logging, stats, and report exports)",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

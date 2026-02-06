@@ -1,0 +1,83 @@
+{
+  "kind": "build_request",
+  "title": "Add 'Custom' currency option and fix transaction save failure in Transaction form",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-25",
+      "text": "Add a \"Custom\" option to the Currency dropdown in the Add/Edit Transaction dialog so users can select a currency not listed in the preset currencies.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "give \"custom\" option in the ddrop down too"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Currency dropdown includes an option labeled \"Custom\" (or \"Custom...\") in addition to the existing preset currencies.",
+        "Selecting \"Custom\" reveals inputs to capture a user-defined currency identifier (e.g., code like \"SGD\" or name) and an optional symbol for display next to the Amount label.",
+        "When \"Custom\" is selected, the exchange-rate section is shown and required (same as other non-INR currencies).",
+        "The INR amount preview (≈ ₹X.XX INR) continues to compute correctly using Amount × Exchange Rate for Custom currency."
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "text": "Fix the Add/Edit Transaction save flow so transactions can be successfully created/updated from the TransactionFormDialog without failing due to frontend-backend parameter/type mismatches.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "and also i couldn't save the transaction"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Submitting the \"Add Transaction\" form successfully persists a new transaction and shows the existing success toast (\"Transaction added successfully!\") and the dialog closes.",
+        "Submitting the \"Edit Transaction\" form successfully updates the existing transaction and shows the existing success toast (\"Transaction updated successfully!\") and the dialog closes.",
+        "Frontend calls to the backend updateTransaction method match the backend Candid signature (i.e., optional fields are passed as optional values, not required primitives), avoiding runtime call failures.",
+        "If the backend rejects the call (e.g., unauthorized), the UI shows an error toast and does not close the dialog."
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "text": "Improve error visibility for failed transaction saves by surfacing the underlying error message (when available) in the UI toast while keeping user-facing text in English.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When saving fails, the toast still starts with an English summary (e.g., \"Failed to save transaction\") and additionally includes the underlying error message string when it can be extracted safely.",
+        "No raw non-string objects are rendered in the toast; error details are stringified safely.",
+        "This change applies to both add and update transaction flows."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor in backend/main.mo (no additional backend services).",
+    "Do not edit files under frontend/src/components/ui or other frontend immutable paths listed in SYSTEM_CONTEXT."
+  ],
+  "nonGoals": [
+    "Do not add automatic/live exchange-rate lookup or any third-party currency APIs.",
+    "Do not change the stored backend transaction currency model (transactions remain stored as INR amounts).",
+    "Do not add new authentication providers beyond Internet Identity."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}
